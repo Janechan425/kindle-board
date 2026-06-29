@@ -1,0 +1,462 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Kindle Board</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #f6f6f1;
+      color: #111;
+      font-family: "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    .page {
+      box-sizing: border-box;
+      width: 100vw;
+      height: 100vh;
+      padding: 18px 24px 22px;
+      border: 8px solid #111;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.04) 0, rgba(0,0,0,0) 22px),
+        #f6f6f1;
+    }
+
+    .top {
+      display: table;
+      width: 100%;
+      border-bottom: 4px double #111;
+      padding-bottom: 14px;
+    }
+
+    .date, .status {
+      display: table-cell;
+      vertical-align: top;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .status {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .city-select {
+      margin-top: 8px;
+      max-width: 180px;
+      border: 2px solid #111;
+      background: #fff;
+      color: #111;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .clock-wrap {
+      display: table;
+      width: 100%;
+      margin-top: 14px;
+      table-layout: fixed;
+    }
+
+    .flip {
+      display: table-cell;
+      vertical-align: middle;
+      height: 360px;
+      border: 5px solid #111;
+      background: #fff;
+      text-align: center;
+      position: relative;
+      box-shadow: 10px 10px 0 #111;
+    }
+
+    .digit {
+      font-family: Baskerville, "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+      font-size: 270px;
+      line-height: 360px;
+      font-weight: bold;
+      letter-spacing: 0;
+    }
+
+    .colon {
+      display: table-cell;
+      width: 70px;
+      text-align: center;
+      vertical-align: middle;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 172px;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .panel {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 5px solid #111;
+      padding-top: 10px;
+      vertical-align: top;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    .panel + .panel {
+      margin-top: 18px;
+    }
+
+    .label {
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-bottom: 2px solid #111;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .weather-main {
+      font-size: 52px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .weather-note, .memo {
+      margin-top: 12px;
+      font-size: 20px;
+      line-height: 1.3;
+    }
+
+    .city-quote {
+      margin-top: 0;
+      padding: 14px 4px 0;
+      font-size: 28px;
+      line-height: 1.45;
+      font-family: "Microsoft YaHei", "SimSun", "Songti SC", Georgia, serif;
+      font-weight: bold;
+    }
+
+    .rain-alert {
+      display: inline-block;
+      margin-top: 10px;
+      border: 3px solid #111;
+      padding: 5px 8px;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      background: #fff;
+    }
+
+    .small {
+      font-size: 15px;
+      line-height: 1.35;
+      margin-top: 12px;
+    }
+
+    .forecast {
+      margin-top: 12px;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.15;
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+    }
+
+    .forecast-row {
+      display: table-cell;
+      vertical-align: top;
+      text-align: center;
+      border: 2px solid #111;
+      padding: 6px 2px;
+    }
+
+    .forecast-day {
+      font-weight: bold;
+      display: block;
+    }
+
+    .forecast-range {
+      display: block;
+      margin-top: 5px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .forecast-rain {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    @media (orientation: portrait) {
+      .page {
+        padding: 18px;
+      }
+
+      .digit {
+        font-size: 210px;
+      }
+
+      .flip {
+        height: 290px;
+      }
+
+      .colon {
+        width: 42px;
+        font-size: 82px;
+      }
+
+      .panel {
+        margin-top: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="top">
+      <div class="date" id="dateText">Loading date</div>
+      <div class="status">
+        <div id="statusText">Kindle Board</div>
+        <select class="city-select" id="citySelect"></select>
+      </div>
+    </div>
+
+    <div class="clock-wrap">
+      <div class="flip"><div class="digit" id="hourText">--</div></div>
+      <div class="colon">:</div>
+      <div class="flip"><div class="digit" id="minuteText">--</div></div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="label">Weather</div>
+        <div class="weather-main" id="tempText">-- C</div>
+        <div class="weather-note" id="weatherText">Set your city in the file.</div>
+        <div class="rain-alert" id="rainText">Rain: --</div>
+        <div class="forecast" id="forecastText">Weekly forecast loading...</div>
+      </div>
+
+      <div class="panel">
+        <div class="memo city-quote" id="memoText">湖风吹过石灰岩街道。<br>Lake air over limestone streets.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var CONFIG = {
+      city: "Kingston",
+      latitude: 44.2312,
+      longitude: -76.4860,
+      timeZone: "America/Toronto",
+      utcOffsetHours: -4,
+      use24Hour: true,
+      weatherRefreshMinutes: 30,
+      memo: ["湖风吹过石灰岩街道。<br>Lake air over limestone streets."]
+    };
+
+    var CITIES = [
+      { name: "Kingston", latitude: 44.2312, longitude: -76.4860, timeZone: "America/Toronto", utcOffsetHours: -4, memo: ["湖风吹过石灰岩街道。<br>Lake air over limestone streets.", "今天也把温柔留给你。<br>Today is gentle because of you."] },
+      { name: "Toronto", latitude: 43.6532, longitude: -79.3832, timeZone: "America/Toronto", utcOffsetHours: -4, memo: ["街车穿过玻璃与湖光。<br>Streetcars through glass and lake light.", "再忙的城市，也有一格时间想你。<br>Even a busy city leaves one square of time for you."] },
+      { name: "Boston", latitude: 42.3601, longitude: -71.0589, timeZone: "America/New_York", utcOffsetHours: -4, memo: ["红砖、书页和海港风。<br>Brick, books, and harbor wind.", "把海风和清晨都寄给你。<br>Sending the harbor wind and morning light to you."] },
+      { name: "Vancouver", latitude: 49.2827, longitude: -123.1207, timeZone: "America/Vancouver", utcOffsetHours: -7, memo: ["山很近，雨很轻。<br>Mountains close, rain soft.", "下雨的时候，也想和你慢慢走。<br>When it rains, I want to walk slowly with you."] },
+      { name: "New York", latitude: 40.7128, longitude: -74.0060, timeZone: "America/New_York", utcOffsetHours: -4, memo: ["城市在网格里奔跑。<br>The city runs inside a grid.", "人潮很大，心里只给你留灯。<br>In the crowd, one light stays on for you."] },
+      { name: "London", latitude: 51.5072, longitude: -0.1276, timeZone: "Europe/London", utcOffsetHours: 1, memo: ["河流、细雨和旧石头。<br>River, rain, and old stone.", "如果雾起，就把想念写给你。<br>If the fog rises, I write the longing to you."] },
+      { name: "Tokyo", latitude: 35.6762, longitude: 139.6503, timeZone: "Asia/Tokyo", utcOffsetHours: 9, memo: ["霓虹有序，巷口安静。<br>Neon ordered, alleys quiet.", "世界很亮，最想看见你。<br>The world is bright; I still want to see you most."] },
+      { name: "Shanghai", latitude: 31.2304, longitude: 121.4737, timeZone: "Asia/Shanghai", utcOffsetHours: 8, memo: ["江水转弯，高楼生长。<br>The river bends, towers rise.", "风经过外滩，也会替我想你。<br>The river wind thinks of you for me."] },
+      { name: "Changsha", latitude: 28.2282, longitude: 112.9388, timeZone: "Asia/Shanghai", utcOffsetHours: 8, memo: ["湘江边，夜色有热气。<br>By the Xiang River, night keeps its warmth.", "热气腾腾的夜里，最想见你。<br>In the warm night, I miss you most."] },
+      { name: "Dongguan", latitude: 23.0207, longitude: 113.7518, timeZone: "Asia/Shanghai", utcOffsetHours: 8, memo: ["南方的雨落在厂房之间。<br>Southern rain falls between factory roofs.", "雨声很近，你也很近。<br>The rain is close, and so are you."] }
+    ];
+
+    function pad(n) {
+      return n < 10 ? "0" + n : "" + n;
+    }
+
+    function dayName(n) {
+      return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][n];
+    }
+
+    function monthName(n) {
+      return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][n];
+    }
+
+    function currentMemo(now) {
+      var memos = CONFIG.memo;
+      if (!memos || !memos.length) return "";
+      return memos[now.getDate() % memos.length];
+    }
+
+    function getCityTime() {
+      var now = new Date();
+      try {
+        var text = now.toLocaleString("en-US", { timeZone: CONFIG.timeZone });
+        var parsed = new Date(text);
+        if (!isNaN(parsed.getTime())) return parsed;
+      } catch (e) {}
+
+      return new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (CONFIG.utcOffsetHours * 3600000));
+    }
+
+    function updateClock() {
+      var now = getCityTime();
+      var h = now.getHours();
+      var suffix = "";
+
+      if (!CONFIG.use24Hour) {
+        suffix = h >= 12 ? " PM" : " AM";
+        h = h % 12;
+        if (h === 0) h = 12;
+      }
+
+      document.getElementById("hourText").innerHTML = pad(h);
+      document.getElementById("minuteText").innerHTML = pad(now.getMinutes());
+      document.getElementById("dateText").innerHTML =
+        dayName(now.getDay()) + "<br>" + monthName(now.getMonth()) + " " + now.getDate() + ", " + now.getFullYear() + suffix;
+      document.getElementById("statusText").innerHTML = CONFIG.city;
+      document.getElementById("memoText").innerHTML = currentMemo(now);
+    }
+
+    function weatherName(code) {
+      if (code === 0) return "Clear";
+      if (code === 1 || code === 2 || code === 3) return "Clouds";
+      if (code === 45 || code === 48) return "Fog";
+      if (code >= 51 && code <= 67) return "Drizzle";
+      if (code >= 71 && code <= 77) return "Snow";
+      if (code >= 80 && code <= 82) return "Rain";
+      if (code >= 95) return "Storm";
+      return "Weather";
+    }
+
+    function loadWeather() {
+      document.getElementById("tempText").innerHTML = "-- C";
+      document.getElementById("weatherText").innerHTML = "Loading " + CONFIG.city + "...";
+      document.getElementById("rainText").innerHTML = "Rain: --";
+      document.getElementById("forecastText").innerHTML = "Weekly forecast loading...";
+
+      var url = "https://api.open-meteo.com/v1/forecast?latitude=" +
+        CONFIG.latitude + "&longitude=" + CONFIG.longitude +
+        "&current=temperature_2m,relative_humidity_2m,weather_code,precipitation" +
+        "&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max,precipitation_sum&forecast_days=7&timezone=auto";
+
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              var data = JSON.parse(xhr.responseText);
+              var cur = data.current;
+              document.getElementById("tempText").innerHTML = Math.round(cur.temperature_2m) + " C";
+              document.getElementById("weatherText").innerHTML =
+                weatherName(cur.weather_code) + " / Humidity " + Math.round(cur.relative_humidity_2m) + "%";
+              renderRain(cur, data.daily);
+              renderForecast(data.daily);
+            } else {
+              document.getElementById("weatherText").innerHTML = "Weather unavailable";
+              document.getElementById("rainText").innerHTML = "Rain: --";
+              document.getElementById("forecastText").innerHTML = "";
+            }
+          }
+        };
+        xhr.open("GET", url, true);
+        xhr.send(null);
+      } catch (e) {
+        document.getElementById("weatherText").innerHTML = "Weather unavailable";
+        document.getElementById("rainText").innerHTML = "Rain: --";
+        document.getElementById("forecastText").innerHTML = "";
+      }
+    }
+
+    function renderRain(current, daily) {
+      var prob = daily && daily.precipitation_probability_max ? daily.precipitation_probability_max[0] : null;
+      var sum = daily && daily.precipitation_sum ? daily.precipitation_sum[0] : null;
+      var currentRain = current && current.precipitation ? current.precipitation : 0;
+      var text = "Rain: low";
+
+      if (currentRain > 0) {
+        text = "Rain now";
+      } else if (prob !== null && prob >= 70) {
+        text = "Rain likely " + Math.round(prob) + "%";
+      } else if (prob !== null && prob >= 40) {
+        text = "Rain possible " + Math.round(prob) + "%";
+      } else if (prob !== null) {
+        text = "Rain low " + Math.round(prob) + "%";
+      }
+
+      if (sum !== null && sum >= 1) {
+        text += " / " + Math.round(sum) + " mm";
+      }
+
+      document.getElementById("rainText").innerHTML = text;
+    }
+
+    function renderForecast(daily) {
+      if (!daily || !daily.time || !daily.temperature_2m_max || !daily.temperature_2m_min) {
+        document.getElementById("forecastText").innerHTML = "";
+        return;
+      }
+
+      var html = "";
+      for (var i = 0; i < daily.time.length && i < 7; i++) {
+        var date = new Date(daily.time[i] + "T12:00:00");
+        var label = i === 0 ? "Today" : dayName(date.getDay()).slice(0, 3);
+        var high = Math.round(daily.temperature_2m_max[i]);
+        var low = Math.round(daily.temperature_2m_min[i]);
+        var prob = daily.precipitation_probability_max ? daily.precipitation_probability_max[i] : null;
+        var rain = prob === null ? "" : (prob >= 35 ? "Rain " + Math.round(prob) + "%" : "Dry");
+        html += '<div class="forecast-row"><div class="forecast-day">' +
+          label + '</div><div class="forecast-range">' + low + " - " + high + ' C</div><div class="forecast-rain">' + rain + '</div></div>';
+      }
+
+      document.getElementById("forecastText").innerHTML = html;
+    }
+
+    function applyCity(city) {
+      CONFIG.city = city.name;
+      CONFIG.latitude = city.latitude;
+      CONFIG.longitude = city.longitude;
+      CONFIG.timeZone = city.timeZone;
+      CONFIG.utcOffsetHours = city.utcOffsetHours;
+      CONFIG.memo = city.memo;
+      updateClock();
+      loadWeather();
+    }
+
+    function setupCities() {
+      var select = document.getElementById("citySelect");
+      for (var i = 0; i < CITIES.length; i++) {
+        var option = document.createElement("option");
+        option.value = i;
+        option.innerHTML = CITIES[i].name;
+        if (CITIES[i].name === CONFIG.city) option.selected = true;
+        select.appendChild(option);
+      }
+
+      select.onchange = function () {
+        applyCity(CITIES[parseInt(select.value, 10)]);
+      };
+    }
+
+    setupCities();
+    updateClock();
+    loadWeather();
+    setInterval(updateClock, 60000);
+    setInterval(loadWeather, CONFIG.weatherRefreshMinutes * 60000);
+  </script>
+</body>
+</html>
