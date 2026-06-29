@@ -30,14 +30,14 @@
     .wallpaper {
       width: 100vw;
       height: 100vh;
-      padding: clamp(24px, 3vw, 56px);
+      padding: clamp(20px, 2.5vw, 46px);
       background:
         linear-gradient(90deg, rgba(0, 0, 0, .035) 0, rgba(0, 0, 0, 0) 34px),
         #f7f6ef;
       border: clamp(8px, .8vw, 16px) solid #10100f;
       display: grid;
       grid-template-rows: auto minmax(0, 1fr) auto;
-      gap: clamp(18px, 2vw, 32px);
+      gap: clamp(14px, 1.5vw, 26px);
     }
 
     .top {
@@ -91,8 +91,7 @@
     }
 
     .flip {
-      height: min(46vw, 62vh);
-      min-height: 320px;
+      height: clamp(280px, 26vw, 46vh);
       border: clamp(5px, .45vw, 10px) solid #10100f;
       background: #fff;
       box-shadow: clamp(8px, .8vw, 16px) clamp(8px, .8vw, 16px) 0 #10100f;
@@ -113,7 +112,7 @@
 
     .digit {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: min(25vw, 56vh);
+      font-size: clamp(210px, 15.8vw, 39vh);
       line-height: 1;
       font-weight: 900;
       color: #080808;
@@ -216,7 +215,7 @@
       border-top: 6px double #10100f;
       padding-top: clamp(14px, 1.6vw, 28px);
       font-family: Georgia, "Times New Roman", "SimSun", serif;
-      font-size: clamp(36px, 3.2vw, 76px);
+      font-size: clamp(30px, 2.45vw, 58px);
       line-height: 1.12;
       font-weight: 900;
     }
