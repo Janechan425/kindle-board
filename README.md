@@ -4,6 +4,8 @@ A quiet, e-ink friendly dashboard designed for Kindle browsers.
 
 Live site: https://janechan425.github.io/kb/
 
+Wallpaper Engine preview: https://janechan425.github.io/kb/wallpaper-engine/
+
 ## English
 
 Kindle Board turns an idle Kindle into a simple desk display. It is built as a single static HTML page, with a large readable clock, current weather, a 7-day forecast, rain hints, city switching, and short bilingual decorative text.
@@ -18,6 +20,7 @@ Kindle Board turns an idle Kindle into a simple desk display. It is built as a s
 - Bilingual city note / decorative text
 - No build step and no backend server
 - Works as a static GitHub Pages site
+- Includes a desktop Wallpaper Engine version in `wallpaper-engine/`
 
 ### Weather API
 
@@ -32,6 +35,16 @@ https://janechan425.github.io/kb/
 ```
 
 For local testing, open `index.html` directly in a browser.
+
+### Wallpaper Engine
+
+The `wallpaper-engine/` folder contains a desktop wallpaper version. In Wallpaper Engine, drag `wallpaper-engine/index.html` into **Create Wallpaper** to import it as a web wallpaper.
+
+You can also preview it online:
+
+```text
+https://janechan425.github.io/kb/wallpaper-engine/
+```
 
 ## 中文
 
