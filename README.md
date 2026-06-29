@@ -2,7 +2,7 @@
 
 A quiet, e-ink friendly dashboard designed for Kindle browsers.
 
-Live site: https://janechan425.github.io/kindle-board/
+Live site: https://janechan425.github.io/kb/
 
 ## English
 
@@ -28,7 +28,7 @@ This project uses the public Open-Meteo forecast API. For personal/non-commercia
 Open the live URL in a Kindle browser:
 
 ```text
-https://janechan425.github.io/kindle-board/
+https://janechan425.github.io/kb/
 ```
 
 For local testing, open `index.html` directly in a browser.
@@ -58,7 +58,7 @@ Kindle Board 是一个适合 Kindle 浏览器和墨水屏显示的简洁桌面�
 在 Kindle 浏览器中打开：
 
 ```text
-https://janechan425.github.io/kindle-board/
+https://janechan425.github.io/kb/
 ```
 
 本地测试时，也可以直接用浏览器打开 `index.html`。
